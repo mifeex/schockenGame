@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>API exampples & description</title>
+
+    </head>
+    <body>
+        <h3>Hello partner! I'd like to present all API & backend features for you</h3>
+        <div>
+            <h4>Registration and login exampples</h4>
+            <div>
+                <h5>I'm using 2 tables in MySQL BD.</br>
+                    <p>
+                       <i>user</i> - where I put all information about user such as: </br>
+                        hashed password, email, username and game-room-number.</br> 
+                    </p>
+                    <p>
+                        <i>room</i> - there are I save all information about game-room like: </br>
+                        owner(creator), uniq ID which can be used by user(to share the room) and included in the link 
+                    </p>
+
+                </h5>
+            </div>
+            
+        </div>
+        <header>
+            <div id="loggedInto">
+                <p>Logged in the system. (Fetch?) GET request <b>/auth/me</b></p>
+                <p>Log out. Fetch GET request <b>/user/logout</b></p>
+                <form>
+                    <button onclick="logout()">Log out</button>
+                </form>
+            </div>
+            <div>
+                <p>You aren't logged into. Fetch POST request <b>/user/login</b></p>
+                <form id="login">
+                    <input id="loginEmail" name="email" type="email" placeholder="email" autocomplete="email" />
+                    <input id="loginPassword" name="password" type="password" placeholder="password" autocomplete="current-password" />
+                    <button onclick="login()">Login</button>
+                </form>
+            </div>
+           
+        </header>
+        
+        <div>
+            <p>Fetch POST request <b>/user/register</b></p>
+            <div>
+                <form id="register" method="POST">
+                    <input id="username" name="username" type="text" placeholder="username" />
+                    <input id="email" name="email" type="email" placeholder="email" autocomplete="email" />
+                    <input id="password" name="password" type="password" placeholder="password" autocomplete="current-password" />
+                    <button onclick="register()">Register</button>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div>
+            <p>Create a new game. Fetch GET request <b>/game/create/:userId</b></p>
+            <form method="">
+                <button onclick="createGame()">Create</button>
+            </form>
+            <p id="link"></p>
+        </div>
+        <div>
+            <p>Start the game. Fetch GET request <b>/game/start/:gameId</b>(from link)</p>
+            <form>
+                <button onclick="startGame()">Start</button>
+            </form>
+        </div>
+    </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script> // you may use all of this scripts to connect with API
+    const gameCode = '';
+//  onclick="history.pushState(null, null, 'game/qydf74bvhd_hfv')"
+
+    // document.addEventListener('load', () => {
+    //     fetch(`/auth/me`)
+    //     .then((response) => {
+    //         console.log(response)
+    //     })      
+    // })
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const windows = window.location.href;
+        console.log(windows)
+        
+        if(windows === `game/qydf74bvhd_hfv`) {
+            console.log(windows)
+            
+        }
+    })
+    const socket = io();
+    socket.emit('/game/enter', localStorage.id, localStorage.gameId);
+
+    socket.on('enter', (name) => {
+        alert(name)
+    })
+    // 
+
+    const createGame = () => {
+        event.preventDefault();
+        const link = document.getElementById('link');
+
+        fetch(`/game/create/${localStorage.id}`)
+        .then((response) => {
+            response.json().then(data => {
+                if(data.errorFromServer) {
+                    alert(data.errorFromServer)
+                }
+                if(data.gameCode) {
+                    gameCode = data.gameCode;
+                    link.innerHTML = `Link: <a href="/${data.gameCode}">${data.gameCode}</a>`;
+                    localStorage.setItem(`gameId`, data.gameCode)
+                }
+            })
+        })
+    }
+
+    const startGame = () => {
+        event.preventDefault();
+
+        fetch(`/game/start/4`)
+        .then(res => {
+            res.json().then(data => {
+                if(data.errorFromServer) {
+                    alert(data.errorFromServer)
+                }  
+            })
+        })
+    }
+
+    const logout = () => {
+        event.preventDefault();
+
+        fetch(`/user/logout`)
+        .then((response) => {
+            localStorage.clear()
+            alert('Goodbye')
+        }) 
+    }
+
+    const login = () => {
+        event.preventDefault();
+
+        const email = document.getElementById('loginEmail').value
+        const password = document.getElementById('loginPassword').value
+
+        const body = {username, email, password}
+
+        fetch(`/user/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        .then((response) => {
+            response.json().then(data => {
+                console.log(data)
+                localStorage.setItem(`id`, data.userId)
+                alert(`Happy login, ${data.userId}`)
+            })
+        })
+    }
+
+    const register = () => {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
+        console.log(password)
+
+        const body = {username, email, password}
+
+        fetch(`/user/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        .then((response) => {
+            response.json().then(data => {
+                localStorage.setItem(`id`, data.userId)
+                alert(`Happy registration, ${data.userId}`)
+            })
+        })
+    }
+    </script>
+</html>

@@ -1,0 +1,118 @@
+.currentDiceSize, .stapelIcon {
+  font-size: 10em;
+}
+
+.markedDice {
+  color: blue;
+}
+
+.playerDiceSize {
+  font-size: 2em;
+}
+
+.currentDices {
+  margin-right: 15px;
+}
+
+.center {
+  text-align: center;
+}
+
+.buttonBottom {
+  margin-bottom: 50px;
+}
+
+.blocked {
+  color: green;
+}
+
+.free {
+  color: black;
+}
+
+.darkDice {
+  background-color: black;
+  border-radius: 20px;
+  color: black;
+}
+
+.darkDiceSmall {
+  background-color: black;
+  border-radius: 5px;
+  color: black;
+}
+
+.smallDices {
+  margin: 2px;
+}
+
+.font2x {
+  font-size: 2em;
+}
+
+.font4x {
+  font-size: 4em;
+}
+
+.activeUserFrame {
+  border: 3px solid #4c89ce !important;
+}
+
+.col-loser {
+  position: absolute;
+  right: 0px;
+  top: 3px;
+}
+
+.smallDices {
+  top: 7px;
+}
+
+.playerDices {
+  width: 100vw;
+}
+
+.loserCurrentRound {
+  border: 3px solid red !important;
+}
+
+.rotate180 {
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.card-body {
+  position: relative;
+}
+
+.col-status {
+  width: 20%;
+  height: 15px;
+  border-top-left-radius: 5pt;
+  right: 0;
+  position: absolute;
+  bottom: -9px;
+  color: white;
+  padding-left: 5px !important;
+  font-size: 70%;
+}
+
+.offline {
+  background-color: #cc6e6e;
+}
+
+.online {
+  background-color: #80c88e;
+}
+
+.demo {
+    font-size: 70%;
+}
+
+@media (min-width: 768px)
+.chart-pie {
+    height: calc(15rem - 43px)!important;
+}
